@@ -1,0 +1,6 @@
+ai_reco_env/
+__pycache__/
+*.pyc
+.env
+models/*.joblib
+data/*.npy
