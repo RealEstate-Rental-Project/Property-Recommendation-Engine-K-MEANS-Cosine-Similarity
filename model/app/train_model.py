@@ -9,7 +9,7 @@ from joblib import dump
 # Optimal K should be determined via the Elbow Method on real data.
 OPTIMAL_K = 3 
 # Features used for clustering (based on your Property entity)
-NUMERICAL_FEATURES = ['rentPerMonth', 'Total_Rooms', 'SqM', 'latitude', 'longitude']
+NUMERICAL_FEATURES = ['normalized_rent', 'Total_Rooms', 'SqM', 'latitude', 'longitude']
 CATEGORICAL_FEATURES = ['propertyType', 'rentalType']
 RANKING_FEATURES = [] # Removed rating
 
@@ -23,7 +23,14 @@ def prepare_data(df):
     """
     print("Starting data preparation and feature scaling...")
     
-    # 1. Select the relevant features
+    # 1. Normalize rent to monthly equivalent
+    # Assuming 30 days in a month; adjust if needed
+    df['normalized_rent'] = df.apply(
+        lambda row: row['rentAmount'] if row['rentalType'] == 'MONTHLY' else row['rentAmount'] * 30,
+        axis=1
+    )
+    
+    # 2. Select the relevant features
     X = df[FEATURE_COLUMNS]
     
     # 2. Create a preprocessing pipeline

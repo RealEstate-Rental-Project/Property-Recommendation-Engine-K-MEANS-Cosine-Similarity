@@ -7,7 +7,7 @@ from .schemas import UserQuery, Recommendation
 
 # --- Configuration (MUST match training script) ---
 # Total number of numerical features used in the ColumnTransformer's 'num' step
-NUMERICAL_FEATURES_COUNT = 5 # 'rentPerMonth', 'Total_Rooms', 'SqFt', 'latitude', 'longitude'
+NUMERICAL_FEATURES_COUNT = 5 # 'normalized_rent', 'Total_Rooms', 'SqM', 'latitude', 'longitude'
 # This list must be ordered exactly as it appears in the UserQuery schema
 USER_QUERY_FEATURES = ['target_rent', 'min_total_rooms', 'target_sqft', 'search_latitude', 'search_longitude']
 TOP_N = 10 # Number of recommendations to return
@@ -77,11 +77,16 @@ def get_recommendations(query: UserQuery) -> List[Recommendation]:
 
     # --- 1. Prepare User Query Vector ---
     
+    # 1.0 Normalize target_rent to monthly equivalent
+    normalized_target_rent = (
+        query.target_rent if query.preferred_rental_type == 'MONTHLY' else query.target_rent * 30
+    )
+    
     # 1.1 Convert Pydantic model to a single row DataFrame for the preprocessor
     # Include all features (numerical, categorical placeholders)
     user_data = {
         # Numerical Features (MUST match order in training script: Price, Rooms, SqM, Lat, Lon)
-        'rentPerMonth': [query.target_rent],
+        'normalized_rent': [normalized_target_rent],
         'Total_Rooms': [adjusted_min_rooms],
         'SqM': [adjusted_sqft],
         'latitude': [query.search_latitude],

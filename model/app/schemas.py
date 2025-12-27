@@ -8,7 +8,7 @@ class UserQuery(BaseModel):
     These features define the user's intent and will be converted into a vector.
     """
     # Numerical Features (from user filters)
-    target_rent: float = Field(..., description="The user's maximum desired monthly rent.")
+    target_rent: float = Field(..., description="The user's maximum desired rent amount (in the unit matching preferred_rental_type, e.g., 1500 for monthly or 50 for daily).")
     min_total_rooms: int = Field(..., description="The user's minimum desired number of rooms.")
     target_sqft: float = Field(..., description="The user's minimum desired square meters.")
     
