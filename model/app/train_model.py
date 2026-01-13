@@ -89,6 +89,7 @@ if __name__ == '__main__':
     try:
         data_path = 'model/data/properties_data.csv'
         df = pd.read_csv(data_path)
+        df['Property_ID'] = df['Property_ID'].astype(str)
     except FileNotFoundError:
         print(f"Error: Could not find CSV file at {data_path}. Ensure it exists.")
         exit()

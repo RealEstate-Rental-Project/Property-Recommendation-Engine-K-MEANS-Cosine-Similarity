@@ -8,24 +8,27 @@ class UserQuery(BaseModel):
     These features define the user's intent and will be converted into a vector.
     """
     # Numerical Features (from user filters)
-    target_rent: float = Field(..., description="The user's maximum desired rent amount (in the unit matching preferred_rental_type, e.g., 1500 for monthly or 50 for daily).")
-    min_total_rooms: int = Field(..., description="The user's minimum desired number of rooms.")
-    target_sqft: float = Field(..., description="The user's minimum desired square meters.")
+    target_rent: float = Field(..., alias="targetRent", description="The user's maximum desired rent amount (in the unit matching preferred_rental_type, e.g., 1500 for monthly or 50 for daily).")
+    min_total_rooms: int = Field(..., alias="minTotalRooms", description="The user's minimum desired number of rooms.")
+    target_sqft: float = Field(..., alias="targetSqft", description="The user's minimum desired square meters.")
     
     # Location (from search area)
-    search_latitude: float = Field(..., description="The latitude of the target search area.")
-    search_longitude: float = Field(..., description="The longitude of the target search area.")
+    search_latitude: float = Field(..., alias="searchLatitude", description="The latitude of the target search area.")
+    search_longitude: float = Field(..., alias="searchLongitude", description="The longitude of the target search area.")
     
     # Categorical Feature (from user filter)
     # Using simple strings; model_service will handle One-Hot Encoding
-    preferred_property_type: str = Field(..., description="Preferred property type (e.g., APARTMENT, HOUSE, VILLA, STUDIO).")
+    preferred_property_type: str = Field(..., alias="preferredPropertyType", description="Preferred property type (e.g., APARTMENT, HOUSE, VILLA, STUDIO).")
     
     # New rental type
-    preferred_rental_type: str = Field(..., description="Preferred rental type (e.g., MONTHLY, DAILY).")
+    preferred_rental_type: str = Field(..., alias="preferredRentalType", description="Preferred rental type (e.g., MONTHLY, DAILY).")
     
     # User Profile/Contextual Features
-    number_of_people: int = Field(..., description="Number of people in the user's family/household.")
-    is_married: bool = Field(..., description="Whether the user is married or not.")
+    number_of_people: int = Field(..., alias="numberOfPeople", description="Number of people in the user's family/household.")
+    is_married: bool = Field(..., alias="isMarried", description="Whether the user is married or not.")
+
+    class Config:
+        allow_population_by_field_name = True
 
 # --- Output Schema: What the API returns ---
 class Recommendation(BaseModel):

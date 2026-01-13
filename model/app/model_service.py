@@ -55,6 +55,10 @@ def get_recommendations(query: UserQuery) -> List[Recommendation]:
     if kmeans_model is None or property_matrix is None:
         return [] # Return empty if models failed to load
 
+    # Handle LONG_TERM as MONTHLY
+    if query.preferred_rental_type == 'LONG_TERM':
+        query.preferred_rental_type = 'MONTHLY'
+
     # --- Adjust query based on user lifestyle ---
     adjusted_min_rooms = query.min_total_rooms
     adjusted_sqft = query.target_sqft
