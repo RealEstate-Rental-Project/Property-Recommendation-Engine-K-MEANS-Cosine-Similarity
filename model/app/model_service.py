@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from typing import List
-from .schemas import UserQuery, Recommendation
+from schemas import UserQuery, Recommendation
 
 # --- Configuration (MUST match training script) ---
 # Total number of numerical features used in the ColumnTransformer's 'num' step
