@@ -1,4 +1,4 @@
-from joblib import load
+import pickle
 import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
@@ -13,8 +13,8 @@ USER_QUERY_FEATURES = ['target_rent', 'min_total_rooms', 'target_sqft', 'search_
 TOP_N = 10 # Number of recommendations to return
 
 # --- Global Variables and Paths ---
-K_MEANS_PATH = 'model/models/k_means_model.joblib'
-PREPROCESSOR_PATH = 'model/models/preprocessor.joblib'
+K_MEANS_PATH = 'model/models/k_means_model.pkl'
+PREPROCESSOR_PATH = 'model/models/preprocessor.pkl'
 FEATURE_MATRIX_PATH = 'model/data/property_feature_matrix.npy'
 
 # These will be loaded once when the FastAPI application starts
@@ -31,8 +31,10 @@ def load_artifacts():
     try:
         print("Loading ML artifacts...")
         # Load the trained models and artifacts
-        kmeans_model = load(K_MEANS_PATH)
-        preprocessor = load(PREPROCESSOR_PATH)
+        with open(K_MEANS_PATH, 'rb') as f:
+            kmeans_model = pickle.load(f)
+        with open(PREPROCESSOR_PATH, 'rb') as f:
+            preprocessor = pickle.load(f)
         property_matrix = np.load(FEATURE_MATRIX_PATH, allow_pickle=True)
         
         # Verify load success

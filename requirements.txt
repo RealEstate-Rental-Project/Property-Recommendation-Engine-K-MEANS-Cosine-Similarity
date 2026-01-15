@@ -3,4 +3,3 @@ uvicorn[standard]
 scikit-learn
 pandas
 numpy
-joblib

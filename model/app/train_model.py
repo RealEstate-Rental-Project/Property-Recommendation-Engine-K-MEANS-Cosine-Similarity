@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-from joblib import dump
+import pickle
 
 # --- Configuration ---
 # Optimal K should be determined via the Elbow Method on real data.
@@ -49,8 +49,9 @@ def prepare_data(df):
     X_processed = preprocessor.fit_transform(X)
     
     # 4. Save the preprocessor (scaler and encoder) for use on live user input
-    dump(preprocessor, 'model/models/preprocessor.joblib')
-    print("Preprocessor (Scaler + Encoder) saved to model/models/preprocessor.joblib")
+    with open('model/models/preprocessor.pkl', 'wb') as f:
+        pickle.dump(preprocessor, f)
+    print("Preprocessor (Scaler + Encoder) saved to model/models/preprocessor.pkl")
     
     return X_processed, df['Property_ID'].values
 
@@ -68,8 +69,9 @@ def train_and_save_kmeans(X_features, property_ids):
     cluster_labels = kmeans.labels_
     
     # 2. Save the trained K-Means model
-    dump(kmeans, 'model/models/k_means_model.joblib')
-    print("K-Means model saved to model/models/k_means_model.joblib")
+    with open('model/models/k_means_model.pkl', 'wb') as f:
+        pickle.dump(kmeans, f)
+    print("K-Means model saved to model/models/k_means_model.pkl")
     
     # 3. Create the crucial feature matrix for Stage 2 (Cosine Similarity)
     # Matrix format: [Property ID, Cluster ID, Feature Vector...]
